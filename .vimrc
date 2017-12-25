@@ -5,7 +5,7 @@ filetype off                  " 必须
 set rtp+=~/.vim/bundle/Vundle.vim
 " call vundle#begin()
 " 另一种选择, 指定一个vundle安装插件的路径
-call vundle#begin('~/.vim/c++/plugin')
+call vundle#begin()
 " 让vundle管理插件版本,必须
 Plugin 'VundleVim/Vundle.vim'
 " 以下范例用来支持不同格式的插件安装.
@@ -127,7 +127,7 @@ set softtabstop=4
 set paste
 
 " 设置tags
-set tags+=~/.vim/c++/tags
+set tags+=~/tags
 
 " Indent Guides（https://github.com/nathanaelkane/vim-indent-guides ）
 " 随 vim 自启动
