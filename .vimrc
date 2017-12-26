@@ -29,6 +29,8 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tomasr/molokai'
 Plugin 'vim-scripts/phd'
+Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'Lokaltog/vim-powerline'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'nathanaelkane/vim-indent-guides'
@@ -45,15 +47,15 @@ Plugin 'vim-scripts/DrawIt'
 Plugin 'terryma/vim-multiple-cursors'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
-Plugin 'SirVer/ultisnips'
+" Plugin 'SirVer/ultisnips'
 " Plugin 'Valloric/YouCompleteMe'
 Plugin 'OmniCppComplete'
-Plugin 'derekwyatt/vim-protodef'
-Plugin 'fholgado/minibufexpl.vim'
-Plugin 'gcmt/wildfire.vim'
-Plugin 'sjl/gundo.vim'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'suan/vim-instant-markdown'
+" Plugin 'derekwyatt/vim-protodef'
+" Plugin 'fholgado/minibufexpl.vim'
+" Plugin 'gcmt/wildfire.vim'
+" Plugin 'sjl/gundo.vim'
+" Plugin 'Lokaltog/vim-easymotion'
+" Plugin 'suan/vim-instant-markdown'
 " Plugin 'lilydjwg/fcitx.vim'
 
 " 你的所有插件需要在下面这行之前
@@ -79,8 +81,8 @@ set termencoding=utf-8
 set encoding=utf-8
 
 set background=dark
-colorscheme solarized
-"colorscheme molokai
+"colorscheme solarized
+colorscheme molokai
 "colorscheme phd
 
 " 禁止光标闪烁
@@ -101,8 +103,8 @@ set ruler
 " 开启行号显示
 set number
 " 高亮显示当前行/列
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 " 高亮显示搜索结果
 set hlsearch
 " 禁止折行
@@ -114,6 +116,9 @@ syntax on
 
 " 自适应不同语言的智能缩进
 filetype indent on
+" 依据上面的对齐格式，智能的选择对齐方式，对于类似C语言编写上有用
+set smartindent
+
 " 将制表符扩展为空格
 " set expandtab
 " 设置编辑时制表符占用空格数
@@ -128,6 +133,11 @@ set paste
 
 " 设置tags
 set tags+=~/tags
+
+" 设置leader按键
+let mapleader=";"
+nmap <c-m> %
+imap <c-m> <Esc>%i
 
 " Indent Guides（https://github.com/nathanaelkane/vim-indent-guides ）
 " 随 vim 自启动
@@ -149,6 +159,8 @@ set nofoldenable
 " vim-fswitch（https://github.com/derekwyatt/vim-fswitch ）
 " *.cpp 和 *.h 间切换
 nmap <silent> <Leader>sw :FSHere<cr> 
+nmap <A-o> :FSHere<cr>
+imap <A-o> <Esc>:FSHere<cr>
 
 " vim-signature（https://github.com/kshenoy/vim-signature ）
 let g:SignatureMap = {
@@ -178,7 +190,7 @@ let g:SignatureMap = {
 " 设置 tagbar 子窗口的位置出现在主编辑区的左边 
 " let tagbar_left=1 
 " " 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
-nnoremap <Leader>ilt :TagbarToggle<CR> 
+nnoremap <Leader>tt :TagbarToggle<CR> 
 " 设置标签子窗口的宽度 
 let tagbar_width=32 
 " tagbar 子窗口中不显示冗余帮助信息 
@@ -245,7 +257,7 @@ let g:multi_cursor_skip_key='<C-k>'
 " -- r，刷新工程目录文件列表；
 " -- I（大写），显示/隐藏隐藏文件；
 " -- m，出现创建/删除/剪切/拷贝操作列表。
-nmap <Leader>fl :NERDTreeToggle<CR>
+nmap <Leader>ff :NERDTreeToggle<CR>
 " 设置NERDTree子窗口宽度
 let NERDTreeWinSize=32
 " 设置NERDTree子窗口位置
@@ -256,6 +268,11 @@ let NERDTreeShowHidden=1
 let NERDTreeMinimalUI=1
 " 删除文件时自动删除文件对应 buffer
 let NERDTreeAutoDeleteBuffer=1
+
+" UltiSnips 的 tab 键与 YCM 冲突，重新设定
+let g:UltiSnipsExpandTrigger="<leader><tab>"
+let g:UltiSnipsJumpForwardTrigger="<leader><tab>"
+let g:UltiSnipsJumpBackwardTrigger="<leader><s-tab>"
 
 " 显示/隐藏 MiniBufExplorer 窗口
 map <Leader>bl :MBEToggle<cr>
@@ -289,4 +306,54 @@ let OmniCpp_DisplayMode=1
 
 au CursorMovedI,InsertLeave * if pumvisible() == 0|silent! pclose|endif
 
+let g:airline_theme="molokai" 
 
+""""""""""""""""""""""""""""""
+" Airline Setting
+""""""""""""""""""""""""""""""
+"这个是安装字体后 必须设置此项" 
+let g:airline_powerline_fonts = 1   
+ 
+"打开tabline功能,方便查看Buffer和切换，这个功能比较不错"
+"我还省去了minibufexpl插件，因为我习惯在1个Tab下用多个buffer"
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+"设置切换Buffer快捷键"
+nnoremap <C-N> :bn<CR>
+nnoremap <C-P> :bp<CR>
+
+" 关闭状态显示空白符号计数,这个对我用处不大"
+let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#whitespace#symbol = '!'
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+" let g:airline_left_sep = '⮀'
+" let g:airline_left_alt_sep = '⮁'
+" let g:airline_right_sep = '⮂'
+" let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.branch = '⭠'
+let g:airline_symbols.readonly = '⭤'
+" let g:airline_symbols.linenr = '⭡'
+
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.crypt = '🔒'
+let g:airline_symbols.linenr = '☰'
+" let g:airline_symbols.maxlinenr = ''
+" let g:airline_symbols.branch = '⎇'
+" let g:airline_symbols.paste = 'ρ'
+" let g:airline_symbols.spell = 'Ꞩ'
+" let g:airline_symbols.notexists = '∄'
+" let g:airline_symbols.whitespace = 'Ξ'
+
+" 在Gvim中我设置了英文用Hermit， 中文使用 YaHei Mono "
+if has('win32')
+  set guifont=Hermit:h13
+  set guifontwide=Microsoft_YaHei_Mono:h12
+endif
